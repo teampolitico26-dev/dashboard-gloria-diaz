@@ -63,13 +63,40 @@ td{padding:10px;border-bottom:1px solid #eee;}
     text-align: center;
 }
 .marque-img {
-    max-width: 600px;
+    max-width: 100%;
+    width: auto;
     height: auto;
     animation: aparecer 2s ease-in-out;
 }
 @keyframes aparecer {
     0% { opacity: 0; transform: scale(0.8); }
     100% { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 768px) {
+    body { padding: 10px; }
+    .header { padding: 10px; border-radius: 10px; }
+    .logo { max-width: 90%; }
+    .marque-img { max-width: 90%; }
+    .subtitle { font-size: 0.9em; }
+    .filtros { padding: 15px; }
+    .filtros-grid { grid-template-columns: 1fr; gap: 10px; }
+    .categorias { padding: 15px; }
+    .cat-grid { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: 1fr; gap: 15px; }
+    .charts-grid { grid-template-columns: 1fr; gap: 15px; }
+    .chart-card { padding: 15px; }
+    .table-container { padding: 10px; font-size: 0.85em; }
+    table { font-size: 0.8em; }
+    th, td { padding: 8px 5px; }
+}
+@media (max-width: 480px) {
+    .logo { max-width: 100%; }
+    .marque-img { max-width: 100%; }
+    .subtitle { font-size: 0.8em; }
+    .filtros-title, .categorias-title, .chart-title { font-size: 1.1em; }
+    .kpi-title { font-size: 1.3em; }
+    table { font-size: 0.75em; }
 }
 </style>
 </head>
