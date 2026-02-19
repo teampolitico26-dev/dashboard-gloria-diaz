@@ -149,6 +149,14 @@ td{padding:10px;border-bottom:1px solid #eee;}
 <label>📋 Origen:</label>
 <select id="fOrigen" onchange="filtrar()"><option value="">Todos</option></select>
 </div>
+<div class="filtro-item">
+<label>📱 Duplicados:</label>
+<select id="fDuplicados" onchange="filtrar()">
+<option value="todos">Mostrar todos</option>
+<option value="sin_duplicados">Omitir duplicados</option>
+<option value="solo_duplicados">Solo duplicados</option>
+</select>
+</div>
 <div class="filtro-item" style="align-self:flex-end;">
 <button class="btn" onclick="limpiar()">🔄 Limpiar</button>
 </div>
@@ -336,6 +344,17 @@ fechaHastaNum=parseInt(y)*10000+parseInt(m)*100+parseInt(d);
 console.log('Hasta:',fechaHastaInput,'→',fechaHastaNum);
 }
 
+// Primero detectar duplicados por número de celular
+const celularCount={};
+allData.forEach(row=>{
+const cel=(row.CELULAR||'').trim();
+if(cel){
+celularCount[cel]=(celularCount[cel]||0)+1;
+}
+});
+
+const duplicadosOpt=document.getElementById('fDuplicados').value;
+
 filteredData=allData.filter(row=>{
 // Filtros simples
 if(asesor&&(row.ASESOR||'Sin Asesor')!==asesor)return false;
@@ -361,6 +380,19 @@ const fechaNum=parsed.ano*10000+parsed.mes*100+parsed.dia;
 if(fechaNum<fechaDesdeNum||fechaNum>fechaHastaNum)return false;
 }
 
+// Filtro de duplicados
+if(duplicadosOpt!=='todos'){
+const cel=(row.CELULAR||'').trim();
+if(!cel){
+// Si no tiene celular, decidir si incluirlo
+if(duplicadosOpt==='solo_duplicados')return false;
+}else{
+const esDuplicado=celularCount[cel]>1;
+if(duplicadosOpt==='sin_duplicados'&&esDuplicado)return false;
+if(duplicadosOpt==='solo_duplicados'&&!esDuplicado)return false;
+}
+}
+
 return true;
 });
 
@@ -380,6 +412,7 @@ document.getElementById('fFechaDesde').value='';
 document.getElementById('fFechaHasta').value='';
 document.getElementById('fResultado').value='';
 document.getElementById('fOrigen').value='';
+document.getElementById('fDuplicados').value='todos';
 filteredData=[...allData];
 processData();
 }
